@@ -220,6 +220,18 @@ This project is ready for deployment on:
 5. **Visit [HINOW AI Hub](https://hinow.ai)** - explore available models and features
 6. **Share your creation** - contribute to the community!
 
+## ⭐ Show Your Support
+
+If this project helped you build something amazing or learn about AI agents, please **give it a star!** ⭐
+
+Your support helps us:
+- 🚀 **Build better examples** and tutorials
+- 📖 **Create more documentation** and guides  
+- 🔧 **Develop new features** for the HINOW platform
+- 🌟 **Reach more developers** who can benefit from these tools
+
+**[⭐ Star this repository](../../stargazers)** - It takes just one click and means a lot to our team!
+
 ## 🤝 Contributing
 
 Feel free to:
