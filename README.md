@@ -1,13 +1,42 @@
 # 🍕 Pizza Ordering Agent with HINOW API
 
-<div align="center">
-  <img src="https://www.hinow.ai/logo_full.png" alt="HINOW AI Hub" width="200"/>
-  <br><br>
-</div>
-
 A practical demonstration of how to build an AI agent with **function calling** capabilities using the [HINOW AI Hub](https://hinow.ai). This project implements a complete pizza ordering chatbot with cart management and session handling.
 
 **HINOW** is a comprehensive AI hub that provides fast, standardized, and secure access to the best AI models available. This example showcases the power of HINOW's unified API for building production-ready AI applications.
+
+## 🎬 Agent in Action
+
+See how the AI agent handles natural language requests and automatically selects the right tools:
+
+<div align="center">
+
+### 1. 📋 Requesting the Menu
+<img src="imgs/01-menu-request.png" alt="AI agent displaying pizza menu" width="600"/>
+
+*The AI understands the menu request and calls the `get_pizza_menu` tool*
+
+---
+
+### 2. 🍕 Placing an Order  
+<img src="imgs/02-placing-order.png" alt="AI agent adding pizza to cart" width="600"/>
+
+*Natural language order gets converted to `add_to_order` tool call*
+
+---
+
+### 3. ➕ Adding More Items
+<img src="imgs/03-adding-more-items.png" alt="AI agent adding additional items" width="600"/>
+
+*The agent seamlessly handles multiple additions with quantity support*
+
+---
+
+### 4. 🛒 Viewing the Cart
+<img src="imgs/04-viewing-cart.png" alt="AI agent showing cart contents" width="600"/>
+
+*Cart management with `view_cart` tool showing totals and items*
+
+</div>
 
 ## 🎯 What This Project Does
 
