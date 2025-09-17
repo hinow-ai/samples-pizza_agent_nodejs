@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍕 Pizza Agent</title>
+    <style>
+        /* Basic styles */
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0 0 5px 0;
+            font-size: 1.8em;
+        }
+
+        .header p {
+            margin: 0;
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        /* Quick buttons */
+        .quick-buttons {
+            padding: 12px 15px;
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .quick-btn {
+            padding: 6px 12px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 12px;
+            color: #555;
+        }
+
+        .quick-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Chat area */
+        .chat-container {
+            height: 500px;
+            overflow-y: auto;
+            padding: 15px;
+            background: #fafafa;
+        }
+
+        .message {
+            margin: 15px 0;
+            padding: 12px 16px;
+            border-radius: 12px;
+            max-width: 75%;
+            word-wrap: break-word;
+        }
+
+        .message.user {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-left: auto;
+        }
+
+        .message.assistant {
+            background: white;
+            color: #333;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        /* Input area */
+        .input-section {
+            padding: 15px;
+            display: flex;
+            gap: 12px;
+            background: white;
+        }
+
+        .message-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .message-input:focus {
+            border-color: #667eea;
+        }
+
+        .send-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .send-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+        }
+
+        .send-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Markdown formatting */
+        .message strong { font-weight: 600; }
+        .message h1, .message h2, .message h3 { margin: 0 0 10px 0; }
+        .message p { margin: 0 0 10px 0; }
+        .message p:last-child { margin-bottom: 0; }
+        .message ul, .message ol { margin: 10px 0; padding-left: 20px; }
+        .message li { margin: 5px 0; }
+
+        /* Style for AI thinking process */
+        .thinking-content {
+            background: #f0f0f0;
+            border-left: 4px solid #9b59b6;
+            padding: 10px 12px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-style: italic;
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .thinking-label {
+            font-weight: bold;
+            color: #9b59b6;
+            font-style: normal;
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🍕 Pizza Agent</h1>
+            <p>Choose your pizza with AI assistance</p>
+        </div>
+
+        <!-- Quick action buttons -->
+        <div class="quick-buttons">
+            <button class="quick-btn" onclick="sendQuickMessage('Show me the pizza menu')">🍕 Menu</button>
+            <button class="quick-btn" onclick="sendQuickMessage('Add 2 Margherita pizzas')">➕ Add</button>
+            <button class="quick-btn" onclick="sendQuickMessage('Show my cart')">🛒 Cart</button>
+            <button class="quick-btn" onclick="sendQuickMessage('Remove 1 Margherita pizza')">➖ Remove</button>
+            <button class="quick-btn" onclick="sendQuickMessage('Set Pepperoni to 0')">🗑️ Remove Item</button>
+            <button class="quick-btn" onclick="sendQuickMessage('Clear my cart')">🗑️ Clear</button>
+            <button class="quick-btn" onclick="startNewChat()">🔄 New</button>
+        </div>
+
+        <!-- Chat area -->
+        <div class="chat-container" id="chatContainer">
+            <div class="message assistant">
+                🤖 Hello! I'm your pizza assistant. How can I help?
+            </div>
+        </div>
+
+        <!-- Input area -->
+        <div class="input-section">
+            <input type="text" class="message-input" id="messageInput" 
+                   placeholder="Type your message..." 
+                   onkeypress="handleEnterKey(event)">
+            <button class="send-btn" id="sendBtn" onclick="sendUserMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let sessionId = generateSessionId();
+        let conversationHistory = [{
+            role: 'system',
+            content: 'Pizza assistant. Use tools immediately. No long thinking. Menu request → get_pizza_menu. Number 1,2,3 → add_to_order with that exact number. Be direct.'
+        }];
+
+        // Generate unique session ID
+        function generateSessionId() {
+            return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        // Handle Enter key in input
+        function handleEnterKey(event) {
+            if (event.key === 'Enter') {
+                sendUserMessage();
+            }
+        }
+
+        // Add message to chat
+        function addMessageToChat(content, type) {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.innerHTML = formatMessage(content);
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Clean <think> tags from message (for conversation history)
+        function cleanThinkTags(text) {
+            if (!text) return '';
+            const cleaned = text.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
+            console.log('🧹 Cleaned message for history:', cleaned); // Debug
+            return cleaned;
+        }
+
+        // Format message with basic markdown and thinking process
+        function formatMessage(text) {
+            if (!text) return '';
+            
+            console.log('🔍 Formatting text:', text); // Debug
+            
+            // First, extract and format thinking content
+            let formatted = text.replace(/<think>([\s\S]*?)<\/think>/g, function(match, thinkContent) {
+                console.log('🧠 Thinking detected:', thinkContent); // Debug
+                // Clean thinking content (remove extra line breaks)
+                const cleanThinkContent = thinkContent.trim();
+                return `<div class="thinking-content">
+                    <span class="thinking-label">🧠 Think:</span>
+                    ${cleanThinkContent.replace(/\n/g, '<br>')}
+                </div>`;
+            });
+            
+            // Remove extra line breaks at start after processing <think> tags
+            formatted = formatted.replace(/^\n+/, '');
+            
+            // Apply basic markdown formatting to the rest
+            formatted = formatted
+                .replace(/\n/g, '<br>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/^### (.*$)/gm, '<h3>$1</h3>')
+                .replace(/^## (.*$)/gm, '<h2>$1</h2>')
+                .replace(/^# (.*$)/gm, '<h1>$1</h1>');
+            
+            console.log('✅ Text formatted:', formatted); // Debug
+            return formatted;
+        }
+
+        // Enable/disable interface during loading
+        function setLoading(loading) {
+            document.getElementById('sendBtn').disabled = loading;
+            document.getElementById('messageInput').disabled = loading;
+            document.getElementById('sendBtn').textContent = loading ? 'Sending...' : 'Send';
+        }
+
+        // Send quick message
+        function sendQuickMessage(message) {
+            document.getElementById('messageInput').value = message;
+            sendUserMessage();
+        }
+
+        // Start new chat
+        function startNewChat() {
+            sessionId = generateSessionId();
+            conversationHistory = [{
+                role: 'system',
+                content: 'Pizza assistant. Use tools immediately. No long thinking. Menu request → get_pizza_menu. Number 1,2,3 → add_to_order with that exact number. Be direct.'
+            }];
+            
+            document.getElementById('chatContainer').innerHTML = `
+                <div class="message assistant">
+                    🤖 Hello! I'm your pizza assistant with a new cart. How can I help?
+                </div>
+            `;
+        }
+
+        // Main function: send user message
+        async function sendUserMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+
+            // Add user message to chat
+            addMessageToChat(message, 'user');
+            input.value = '';
+            
+            // Add to history
+            conversationHistory.push({ role: 'user', content: message });
+            
+            setLoading(true);
+
+            try {
+                // Send to server
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        messages: conversationHistory,
+                        sessionId: sessionId 
+                    })
+                });
+
+                const data = await response.json();
+                
+                // Update sessionId if server sent a new one
+                if (data.sessionId) {
+                    sessionId = data.sessionId;
+                }
+                
+                // Handle response
+                if (data.error) {
+                    addMessageToChat(`Error: ${data.error}`, 'assistant');
+                } else if (data.message && data.message.trim()) {
+                    addMessageToChat(data.message, 'assistant');
+                    conversationHistory.push({ role: 'assistant', content: cleanThinkTags(data.message) });
+                } else {
+                    addMessageToChat('Sorry, I had an issue. Please try again.', 'assistant');
+                }
+                
+            } catch (error) {
+                addMessageToChat(`Connection error: ${error.message}`, 'assistant');
+            }
+
+            setLoading(false);
+        }
+
+        // Initialization
+        console.log('🍕 Pizza Agent loaded - Session ID:', sessionId);
+    </script>
+</body>
+</html>

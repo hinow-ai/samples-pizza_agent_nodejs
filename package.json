@@ -1,0 +1,33 @@
+{
+  "name": "pizza-ordering-agent",
+  "version": "1.0.0",
+  "description": "Simple pizza ordering agent with HINOW API integration - Simplified for beginners",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "pizza",
+    "ordering",
+    "ai",
+    "agent",
+    "hinow",
+    "function-calling",
+    "chatbot"
+  ],
+  "author": "HINOW Hub Team",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.0",
+    "express": "^4.18.0",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
